@@ -9,11 +9,7 @@ class UserServices
 {
     public function create(array $request)
     {
-        $user = User::create([
-            'name'      => $request['name'],
-            'email'     => $request['email'],
-            'password'  => Hash::make($request['password'])
-        ]);
+        $user = User::create($request);
 
         return $this->getByEmail($user->email);
     }
@@ -27,5 +23,12 @@ class UserServices
             'user' => $user,
             'token' => $token
         ];
+    }
+
+    public function update($user, array $validated)
+    {
+        $user->update($validated);
+
+        return $this->getByEmail($user->email);
     }
 }

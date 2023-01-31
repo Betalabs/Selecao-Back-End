@@ -15,7 +15,7 @@ class User extends Authenticatable
 
     public function comments()
     {
-        return $this->hasMany(Comments::class);
+        return $this->hasMany(Comment::class);
     }
 
     public function setPasswordAttribute($value)

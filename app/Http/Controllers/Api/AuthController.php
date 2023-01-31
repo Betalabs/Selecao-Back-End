@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
-use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Http\Services\UserServices;
 use Illuminate\Http\Request;
@@ -13,14 +14,17 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function getMe()
+    public function getMe(UserServices $userServices)
     {
         if (Auth::check()) {
+            $data = $userServices->getByEmail(Auth::user()->email);
+
             return response()->json([
                 'success'   => true,
-                'user'      => new UserResource(Auth::user()),
-                'message'   => 'User found successfully',
-            ], Response::HTTP_ACCEPTED);
+                'token'     => $data['token'],
+                'user'      => new UserResource($data['user']),
+                'message'   => 'User Logged In Successfully!',
+            ], Response::HTTP_OK);
         }
     }
 
@@ -71,7 +75,7 @@ class AuthController extends Controller
         }
     }
 
-    public function register(RegisterRequest $request, UserServices $userServices)
+    public function register(StoreUserRequest $request, UserServices $userServices)
     {
         try {
             $validated = $request->validated();
@@ -83,6 +87,28 @@ class AuthController extends Controller
                 'token'     => $data['token'],
                 'user'      => new UserResource($data['user']),
                 'message'   => 'User Created In Successfully!',
+            ], Response::HTTP_CREATED);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message'   => $e->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function update(UpdateUserRequest $request, UserServices $userServices)
+    {
+        try {
+            $validated = $request->validated();
+            $user = Auth::user();
+
+            $data = $userServices->update($user, $validated);
+
+            return response()->json([
+                'success'   => true,
+                'token'     => $data['token'],
+                'user'      => new UserResource($data['user']),
+                'message'   => 'User Updated In Successfully!',
             ], Response::HTTP_CREATED);
         } catch (\Throwable $e) {
             return response()->json([
