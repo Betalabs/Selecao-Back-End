@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\UserAvatarRequest;
 use App\Http\Resources\UserResource;
 use App\Http\Services\UserServices;
 use Illuminate\Http\Request;
@@ -109,6 +110,27 @@ class AuthController extends Controller
                 'token'     => $data['token'],
                 'user'      => new UserResource($data['user']),
                 'message'   => 'User Updated In Successfully!',
+            ], Response::HTTP_CREATED);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message'   => $e->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function user_avatar(UserAvatarRequest $request, UserServices $userServices)
+    {
+        try {
+            $request->validated();
+
+            $data = $userServices->upload($request);
+
+            return response()->json([
+                'success'   => true,
+                'token'     => $data['token'],
+                'user'      => new UserResource($data['user']),
+                'message'   => 'Upload Avatar Inserted In Successfully!',
             ], Response::HTTP_CREATED);
         } catch (\Throwable $e) {
             return response()->json([

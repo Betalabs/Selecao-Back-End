@@ -27,9 +27,11 @@ DB_PASSWORD=root
 ```
 
 -   Execute o comando a seguir para criar uma chave específica de seu sistema Laravel
+-   Assim como uma conexão com pastas públicas de avatar
 
 ```bash
-sail artisan key:generate
+php artisan key:generate
+php artisan storage:link
 ```
 
 - A seguir, os comandos necessários para criação das tabelas e dados fictícios:
@@ -46,3 +48,10 @@ ph artisan db:seed --class=DatabaseSeeder
 email: admin@laravel.io
 senha: password
 ```
+
+### Observação
+
+- O projeto foi criado localmente usando apenas de MAMP e conexão com o banco de dados,
+Não interferindo ou adicionando quaisquer arquivos extras de configuração.
+
+- A pasta .docs contem um coleção do Postman para testar as rotas do sistema

@@ -83,7 +83,7 @@ class CommentControler extends Controller
     {
         return response()->json([
             'success'   => true,
-            'user'      => new CommentResource($comment),
+            'comment'      => new CommentResource($comment),
             'message'   => 'Get Comment Successfully!',
         ], Response::HTTP_OK);
     }

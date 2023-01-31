@@ -5,9 +5,10 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
-class StoreUserRequest extends FormRequest
+class UserAvatarRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -16,7 +17,7 @@ class StoreUserRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return Auth::check();
     }
 
     /**
@@ -27,9 +28,7 @@ class StoreUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'      => ['required', 'min:10', 'max:50'],
-            'email'     => ['required', 'unique:users', 'email', 'max:50'],
-            'password'  => ['required', 'min:6']
+            'avatar' => ['nullable', 'mimes:jpge,jpg,png'],
         ];
     }
 
