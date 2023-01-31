@@ -6,7 +6,11 @@
 
 #### Instalação
 
--   Clone o projeto em seu ambiente de desenvolvimento
+-   Clone o projeto em seu ambiente de desenvolvimento e selecione minha branch:
+
+```bash
+diego-sousa-dias
+```
 
 -   Instale as dependência necessárias para o sistema
 
