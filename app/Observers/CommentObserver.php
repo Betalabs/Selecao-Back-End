@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Comment;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class CommentObserver
@@ -16,6 +17,10 @@ class CommentObserver
     public function creating(Comment $comment)
     {
         $comment->id = Str::uuid();
+
+        if (Auth::check()) {
+            $comment->user_id = Auth::user()->id;
+        }
     }
 
     /**
