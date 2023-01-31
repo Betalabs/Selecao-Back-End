@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Comment;
+use App\Models\CommentHistory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -42,7 +43,15 @@ class CommentObserver
      */
     public function updated(Comment $comment)
     {
-        //
+        $oldValue = $comment->getOriginal('comment');
+
+        CommentHistory::create([
+            'id'         => Str::uuid(),
+            'comment_id' => $comment->id,
+            'old_value'  => $oldValue,
+            'new_value'  => $comment->comment,
+            'created_at' => now()
+        ]);
     }
 
     /**
